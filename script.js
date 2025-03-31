@@ -1,7 +1,7 @@
-
 const submit=document.getElementById('submit-btn')
 const result=document.querySelector('.result')
 const input=document.getElementById('input')
+const speech_btn=document.getElementById('voice-btn')
 submit.addEventListener('click',()=>{
 const word=document.getElementById('input').value
 console.log(word)
@@ -16,6 +16,27 @@ input.addEventListener('keydown', async (e) => {
         await search_word(word);
     }
 });
+speech_btn.addEventListener('click',()=>{
+    if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)){
+        result.innerHTML=`<h3 style="color:red;">Speech Recognition is NOT supported in this browser.</h3>`
+        
+    }
+
+    const recognition=new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+    recognition.lang='en-US'
+    recognition.continuous=false
+    recognition.interimResults=false
+    recognition.start()
+    recognition.onerror = function (event) {
+        console.error("Speech recognition error:", event.error);
+        result.innerHTML = `<h3 style="color:red;">Speech recognition error: ${event.error}</h3>`;
+    };
+    recognition.onresult=function (event) {
+        const spokenText = event.results[0][0].transcript;
+        input.value=spokenText
+        search_word(spokenText)
+    };
+})
 const search_word=async(word)=>{
     try{
     result.innerHTML=`<h2>Searching ...</h2>`
@@ -25,7 +46,7 @@ const search_word=async(word)=>{
     console.log(data)
   
     if (data.title === "No Definitions Found") {
-        result.innerHTML = `<h2>Word Not Found</h2>`;
+        result.innerHTML = `<h3>Word Not Found</h3>`;
         return; 
     }
     result.innerHTML = `<h2>${data[0].word}</h2>`;
@@ -63,7 +84,7 @@ result.innerHTML+=`
 `  
     }
     catch(error){
-        result.innerHTML=`<h2 style="color:red;">${error.message}</h2>`
+        result.innerHTML=`<h3 style="color:red;">${error.message}</h3>`
     }
 
 }
