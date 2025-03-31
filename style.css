@@ -29,36 +29,41 @@ h1 {
     
 }
 .search-container{
-    display: flex;
-    align-items: center;
-    gap: 10px;
     width: 100%;
     max-width:800px;
-    margin: auto;
-    padding: 15px;
+    position: relative;
 }
 input {
-    flex-grow: 1; 
     width: 100%;
-    max-width: 400px;
+    max-width: 700px;
     height: 45px;
     border: none;
     border-radius: 3px;
     box-shadow: 3px 3px 3px 3px rgb(153, 152, 152);
     font-size: 20px;
-    padding: 10px;
+    padding: 0px 80px 0px 20px; 
     
 }
 
-.search-icon {
-    font-size: 30px;
+.voice-icon {
+    position: absolute;
+    top: 30%;
+    right: 60px; 
+    font-size: 22px;
     color: rgb(77, 77, 77);
-    padding: 10px;
-    border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
-.search-icon:hover{
+
+.search-icon {
+    position: absolute;
+    top: 30%;
+    right: 20px; 
+    font-size: 22px;
+    color: rgb(77, 77, 77);
+    cursor: pointer;
+}
+
+.search-icon:hover, .voice-icon:hover{
     color: black;
 }
 
