@@ -2,9 +2,11 @@ const submit=document.getElementById('submit-btn')
 const result=document.querySelector('.result')
 const input=document.getElementById('input')
 const speech_btn=document.getElementById('voice-btn')
+const bookmark_btn=document.getElementById('bookmark-btn')
+const clear_list=document.getElementById('clear-list')
+const bookmark_list=document.querySelector('ul')
 submit.addEventListener('click',()=>{
 const word=document.getElementById('input').value
-console.log(word)
 
     search_word(word)
 
@@ -12,7 +14,6 @@ console.log(word)
 input.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') { 
         const word = input.value;
-        console.log(word);
         await search_word(word);
     }
 });
@@ -49,7 +50,10 @@ const search_word=async(word)=>{
         result.innerHTML = `<h3>Word Not Found</h3>`;
         return; 
     }
-    result.innerHTML = `<h2>${data[0].word}</h2>`;
+    result.innerHTML = `
+    <h2 style="display:inline;margin-right:20px;">${data[0].word}</h2> 
+    <i class="fas fa-bookmark bookmark-icon" id="bookmark-word"></i>
+     `;
     const phonetics = data[0].phonetics.find(p => p.audio);
     if (phonetics && phonetics.audio) {
         result.innerHTML += `
@@ -82,12 +86,59 @@ result.innerHTML+=`
 <br>
 <a href=${data[0].sourceUrls}>Click here to read more</a>
 `  
+const bookmark_word = document.getElementById('bookmark-word');
+bookmark_word.addEventListener('click', () => {
+    if(bookmark_word.classList.contains('bookmarked')){
+        bookmark_word.classList.remove('bookmarked')
+        bookmark_word.style.color=''
+        remove_bookmark(data[0].word)
+    }
+    else{
+        bookmark_word.classList.add('bookmarked')
+        bookmark_word.style.color = '#28a745';
+        create_bookmark(data[0].word);
+    }
+    console.log("bookmark_clicked");
+    
+});
+
     }
     catch(error){
         result.innerHTML=`<h3 style="color:red;">${error.message}</h3>`
     }
 
 }
-    
+  
+bookmark_btn.addEventListener('click',()=>{
+    document.getElementById('bookmark-panel').classList.toggle('active')
+
+})
+clear_list.addEventListener('click',()=>{
+    document.getElementById('bookmark-panel').classList.remove('active')
+
+})
+
+const create_bookmark=(word)=>{
+    let li=document.createElement('li')
+    li.className='bookmark-word'
+    li.textContent=word
+    let delete_icon=document.createElement('i')
+    delete_icon.className='fas fa-trash delete-btn'
+    li.appendChild(delete_icon)
+    bookmark_list.appendChild(li)
+    delete_icon.addEventListener('click', () => {
+        li.remove();  
+    });
+    console.log(li)
+    console.log(bookmark_list)
 
 
+}
+const remove_bookmark=(word)=>{
+    let bookmarks=document.querySelectorAll('.bookmark-word')
+    bookmarks.forEach((bookmark) => {
+        if (bookmark.textContent.trim() === word) {
+            bookmark.remove(); 
+        }
+    });
+}
