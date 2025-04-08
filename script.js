@@ -128,6 +128,14 @@ const create_bookmark=(word)=>{
     bookmark_list.appendChild(li)
     delete_icon.addEventListener('click', () => {
         li.remove();  
+        const bookmark_word_icon = document.getElementById('bookmark-word');
+        if (bookmark_word_icon && bookmark_word_icon.classList.contains('bookmarked')) {
+        const currentWord = document.querySelector('.result h2')?.textContent.trim();
+        if (currentWord === word) {
+            bookmark_word_icon.classList.remove('bookmarked');
+            bookmark_word_icon.style.color = '';
+        }
+    }
     });
     console.log(li)
     console.log(bookmark_list)
