@@ -128,6 +128,7 @@ const create_bookmark=(word)=>{
     bookmark_list.appendChild(li)
     delete_icon.addEventListener('click', () => {
         li.remove();  
+        update_book_mark()
         const bookmark_word_icon = document.getElementById('bookmark-word');
         if (bookmark_word_icon && bookmark_word_icon.classList.contains('bookmarked')) {
         const currentWord = document.querySelector('.result h2')?.textContent.trim();
@@ -137,6 +138,7 @@ const create_bookmark=(word)=>{
         }
     }
     });
+    update_book_mark()
     console.log(li)
     console.log(bookmark_list)
 
@@ -149,4 +151,10 @@ const remove_bookmark=(word)=>{
             bookmark.remove(); 
         }
     });
+    update_book_mark()
+}
+const update_book_mark=()=>{
+    const count=document.querySelectorAll('.bookmark-word').length
+    const title=document.getElementById('bookmark-title')
+    title.textContent= `Bookmarks (${count})`
 }
