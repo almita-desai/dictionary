@@ -141,6 +141,10 @@ const create_bookmark=(word)=>{
     update_book_mark()
     console.log(li)
     console.log(bookmark_list)
+    li.addEventListener('click',()=>{
+        search_word(word)
+        input.value=word
+    })
 
 
 }
