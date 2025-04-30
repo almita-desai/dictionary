@@ -5,6 +5,8 @@ const speech_btn=document.getElementById('voice-btn')
 const bookmark_btn=document.getElementById('bookmark-btn')
 const clear_list=document.getElementById('clear-list')
 const bookmark_list=document.querySelector('ul')
+const bookmarkSaved=[]
+
 submit.addEventListener('click',()=>{
 const word=document.getElementById('input').value
 
@@ -44,7 +46,7 @@ const search_word=async(word)=>{
     const response=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
     if(!response.ok) throw new Error ("Word not found")
     const data=await response.json()
-    console.log(data)
+
   
     if (data.title === "No Definitions Found") {
         result.innerHTML = `<h3>Word Not Found</h3>`;
@@ -87,6 +89,10 @@ result.innerHTML+=`
 <a href=${data[0].sourceUrls}>Click here to read more</a>
 `  
 const bookmark_word = document.getElementById('bookmark-word');
+if (bookmarkSaved.includes(data[0].word)) {
+    bookmark_word.classList.add('bookmarked');
+    bookmark_word.style.color = '#28a745';
+}
 bookmark_word.addEventListener('click', () => {
     if(bookmark_word.classList.contains('bookmarked')){
         bookmark_word.classList.remove('bookmarked')
@@ -98,8 +104,7 @@ bookmark_word.addEventListener('click', () => {
         bookmark_word.style.color = '#28a745';
         create_bookmark(data[0].word);
     }
-    console.log("bookmark_clicked");
-    
+
 });
 
     }
@@ -126,8 +131,10 @@ const create_bookmark=(word)=>{
     delete_icon.className='fas fa-trash delete-btn'
     li.appendChild(delete_icon)
     bookmark_list.appendChild(li)
+    saveToLocalStorage(word)
     delete_icon.addEventListener('click', () => {
         li.remove();  
+        remove_bookmark(word); 
         update_book_mark()
         const bookmark_word_icon = document.getElementById('bookmark-word');
         if (bookmark_word_icon && bookmark_word_icon.classList.contains('bookmarked')) {
@@ -139,8 +146,6 @@ const create_bookmark=(word)=>{
     }
     });
     update_book_mark()
-    console.log(li)
-    console.log(bookmark_list)
     li.addEventListener('click',()=>{
         search_word(word)
         input.value=word
@@ -155,6 +160,11 @@ const remove_bookmark=(word)=>{
             bookmark.remove(); 
         }
     });
+    const index = bookmarkSaved.indexOf(word);
+    if (index > -1) {
+        bookmarkSaved.splice(index, 1); 
+    }
+    localStorage.setItem('Words', JSON.stringify(bookmarkSaved));
     update_book_mark()
 }
 const update_book_mark=()=>{
@@ -162,3 +172,22 @@ const update_book_mark=()=>{
     const title=document.getElementById('bookmark-title')
     title.textContent= `Bookmarks (${count})`
 }
+
+const saveToLocalStorage=(word)=>{
+    if (!bookmarkSaved.includes(word)) {
+        bookmarkSaved.push(word);
+        localStorage.setItem('Words', JSON.stringify(bookmarkSaved));
+    }
+}
+const loadWordsFromStorage=()=>{
+    bookmark_list.innerHTML = '';
+
+    const allBookmarks = JSON.parse(localStorage.getItem('Words')) || [];
+    if (Array.isArray(allBookmarks)) {
+        allBookmarks.forEach(word => {
+            create_bookmark(word);
+        });
+    }
+    update_book_mark();
+}
+loadWordsFromStorage()
