@@ -30,6 +30,7 @@ speech_btn.addEventListener('click',()=>{
     recognition.continuous=false
     recognition.interimResults=false
     recognition.start()
+    speech_btn.style.color='rgb(66, 167, 46)'
     recognition.onerror = function (event) {
         console.error("Speech recognition error:", event.error);
         result.innerHTML = `<h3 style="color:red;">Speech recognition error: ${event.error}</h3>`;
@@ -39,6 +40,9 @@ speech_btn.addEventListener('click',()=>{
         input.value=spokenText
         search_word(spokenText)
     };
+    recognition.onend=function(){
+        speech_btn.style.color='rgb(77, 77, 77)'
+    }
 })
 const search_word=async(word)=>{
     try{
