@@ -154,6 +154,8 @@ const create_bookmark=(word)=>{
     li.addEventListener('click',()=>{
         search_word(word)
         input.value=word
+        document.getElementById('bookmark-panel').classList.remove('active')
+
     })
 
 
