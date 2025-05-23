@@ -34,6 +34,7 @@ speech_btn.addEventListener('click',()=>{
     recognition.onerror = function (event) {
         console.error("Speech recognition error:", event.error);
         result.innerHTML = `<h3 style="color:red;">Speech recognition error: ${event.error}</h3>`;
+        speech_btn.style.color='rgb(77, 77, 77)'
     };
     recognition.onresult=function (event) {
         const spokenText = event.results[0][0].transcript;
