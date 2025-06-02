@@ -2,7 +2,7 @@
 
 A dictionary website that allows users to search for English word definitions using text or voice input. Users can also bookmark words for later use, with bookmarks stored in localStorage. Built using **HTML**, **CSS**, and **JavaScript**.
 
----
+
 
 ## Features
 
@@ -12,3 +12,5 @@ A dictionary website that allows users to search for English word definitions us
 - **Bookmark words** with bookmarks stored in localStorage.
 
 All definitions are fetched from the [Free Dictionary API](https://dictionaryapi.dev/).
+
+[Try it out](https://almita-desai.github.io/dictionary/)
